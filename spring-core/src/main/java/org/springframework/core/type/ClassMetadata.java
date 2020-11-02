@@ -31,27 +31,32 @@ import org.springframework.lang.Nullable;
 public interface ClassMetadata {
 
 	/**
+	 * 返回类名称(底层原始类名,带包路径名称)
 	 * Return the name of the underlying class.
 	 */
 	String getClassName();
 
 	/**
+	 * 是否是接口
 	 * Return whether the underlying class represents an interface.
 	 */
 	boolean isInterface();
 
 	/**
+	 * 是否是个注解
 	 * Return whether the underlying class represents an annotation.
 	 * @since 4.1
 	 */
 	boolean isAnnotation();
 
 	/**
+	 * 是否是抽象类
 	 * Return whether the underlying class is marked as abstract.
 	 */
 	boolean isAbstract();
 
 	/**
+	 * 是否可以被创建,不是接口且不是抽象类就返回true了
 	 * Return whether the underlying class represents a concrete class,
 	 * i.e. neither an interface nor an abstract class.
 	 */
@@ -60,11 +65,13 @@ public interface ClassMetadata {
 	}
 
 	/**
+	 * 是否被final修饰的
 	 * Return whether the underlying class is marked as 'final'.
 	 */
 	boolean isFinal();
 
 	/**
+	 * 是否是独立的类(可以单独创建的，顶层类或者静态内部类)
 	 * Determine whether the underlying class is independent, i.e. whether
 	 * it is a top-level class or a nested class (static inner class) that
 	 * can be constructed independently from an enclosing class.
@@ -72,6 +79,7 @@ public interface ClassMetadata {
 	boolean isIndependent();
 
 	/**
+	 * 是否存在封闭类(顶层类则返回false,内部类则为true)
 	 * Return whether the underlying class is declared within an enclosing
 	 * class (i.e. the underlying class is an inner/nested class or a
 	 * local class within a method).
@@ -83,6 +91,7 @@ public interface ClassMetadata {
 	}
 
 	/**
+	 * 返回该类的封闭类，顶层类返回null,内部类则返回最近包装他的类
 	 * Return the name of the enclosing class of the underlying class,
 	 * or {@code null} if the underlying class is a top-level class.
 	 */
@@ -90,6 +99,7 @@ public interface ClassMetadata {
 	String getEnclosingClassName();
 
 	/**
+	 * 是否有父类
 	 * Return whether the underlying class has a super class.
 	 */
 	default boolean hasSuperClass() {
@@ -97,6 +107,7 @@ public interface ClassMetadata {
 	}
 
 	/**
+	 * 获取父类名称(包含包名)
 	 * Return the name of the super class of the underlying class,
 	 * or {@code null} if there is no super class defined.
 	 */
@@ -104,12 +115,15 @@ public interface ClassMetadata {
 	String getSuperClassName();
 
 	/**
+	 * 获取实现接口的名称
 	 * Return the names of all interfaces that the underlying class
 	 * implements, or an empty array if there are none.
 	 */
 	String[] getInterfaceNames();
 
 	/**
+	 *
+	 * 获取类内部中定义的类的类名称
 	 * Return the names of all classes declared as members of the class represented by
 	 * this ClassMetadata object. This includes public, protected, default (package)
 	 * access, and private classes and interfaces declared by the class, but excludes

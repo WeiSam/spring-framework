@@ -1,0 +1,186 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 1048576 bytes for AllocateHeap
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (memory/allocation.inline.hpp:61), pid=302924, tid=0x000000000004a2ec
+#
+# JRE version:  (8.0_181-b13) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.181-b13 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000000030d5000):  JavaThread "Unknown thread" [_thread_in_vm, id=303852, stack(0x0000000002ee0000,0x0000000002fe0000)]
+
+Stack: [0x0000000002ee0000,0x0000000002fe0000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x00000000030d5000 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=303852, stack(0x0000000002ee0000,0x0000000002fe0000)]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ PSYoungGen      total 75776K, used 1300K [0x000000076ba00000, 0x0000000770e80000, 0x00000007c0000000)
+  eden space 65024K, 2% used [0x000000076ba00000,0x000000076bb451f8,0x000000076f980000)
+  from space 10752K, 0% used [0x0000000770400000,0x0000000770400000,0x0000000770e80000)
+  to   space 10752K, 0% used [0x000000076f980000,0x000000076f980000,0x0000000770400000)
+ ParOldGen       total 173568K, used 0K [0x00000006c2e00000, 0x00000006cd780000, 0x000000076ba00000)
+  object space 173568K, 0% used [0x00000006c2e00000,0x00000006c2e00000,0x00000006cd780000)
+ Metaspace       used 785K, capacity 4480K, committed 4480K, reserved 1056768K
+  class space    used 76K, capacity 384K, committed 384K, reserved 1048576K
+
+Card table byte_map: [0x0000000012680000,0x0000000012e70000] byte_map_base: 0x000000000f069000
+
+Marking Bits: (ParMarkBitMap*) 0x0000000077342d00
+ Begin Bits: [0x0000000013bc0000, 0x0000000017b08000)
+ End Bits:   [0x0000000017b08000, 0x000000001ba50000)
+
+Polling page: 0x0000000002fe0000
+
+CodeCache: size=245760Kb used=328Kb max_used=328Kb free=245431Kb
+ bounds [0x00000000032c0000, 0x0000000003530000, 0x00000000122c0000]
+ total_blobs=58 nmethods=0 adapters=38
+ compilation: enabled
+
+Compilation events (0 events):
+No events
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.051 loading class java/lang/Short
+Event: 0.052 loading class java/lang/Short done
+Event: 0.052 loading class java/lang/Integer
+Event: 0.052 loading class java/lang/Integer done
+Event: 0.052 loading class java/lang/Long
+Event: 0.052 loading class java/lang/Long done
+Event: 0.053 loading class java/lang/NullPointerException
+Event: 0.053 loading class java/lang/NullPointerException done
+Event: 0.053 loading class java/lang/ArithmeticException
+Event: 0.053 loading class java/lang/ArithmeticException done
+
+
+Dynamic libraries:
+0x00007ff756ed0000 - 0x00007ff756f07000 	D:\ProgramInstall\java8\jdk1.8\bin\java.exe
+0x00007fff24bc0000 - 0x00007fff24db0000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007fff24300000 - 0x00007fff243b2000 	C:\Windows\System32\KERNEL32.DLL
+0x00007fff229c0000 - 0x00007fff22c63000 	C:\Windows\System32\KERNELBASE.dll
+0x00007fff23e60000 - 0x00007fff23f03000 	C:\Windows\System32\ADVAPI32.dll
+0x00007fff24260000 - 0x00007fff242fe000 	C:\Windows\System32\msvcrt.dll
+0x00007fff22e50000 - 0x00007fff22ee7000 	C:\Windows\System32\sechost.dll
+0x00007fff23f80000 - 0x00007fff240a0000 	C:\Windows\System32\RPCRT4.dll
+0x00007fff23690000 - 0x00007fff23824000 	C:\Windows\System32\USER32.dll
+0x00007fff22990000 - 0x00007fff229b1000 	C:\Windows\System32\win32u.dll
+0x00007fff23b70000 - 0x00007fff23b96000 	C:\Windows\System32\GDI32.dll
+0x00007fff21c30000 - 0x00007fff21dc4000 	C:\Windows\System32\gdi32full.dll
+0x00007fff228f0000 - 0x00007fff2298e000 	C:\Windows\System32\msvcp_win.dll
+0x00007fff226a0000 - 0x00007fff2279a000 	C:\Windows\System32\ucrtbase.dll
+0x00007fff044f0000 - 0x00007fff04775000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.18362.535_none_e6c3b34713100821\COMCTL32.dll
+0x00007fff23830000 - 0x00007fff23b66000 	C:\Windows\System32\combase.dll
+0x00007fff22850000 - 0x00007fff228d0000 	C:\Windows\System32\bcryptPrimitives.dll
+0x00007ffefcf20000 - 0x00007ffefd01e000 	C:\Windows\SYSTEM32\winhafnt64.dll
+0x00007fff17720000 - 0x00007fff1772a000 	C:\Windows\SYSTEM32\VERSION.dll
+0x00007fff22d50000 - 0x00007fff22d7e000 	C:\Windows\System32\IMM32.DLL
+0x00007ffefc540000 - 0x00007ffefca10000 	C:\Windows\SYSTEM32\winhadnt64.dll
+0x00007fff24200000 - 0x00007fff24252000 	C:\Windows\System32\SHLWAPI.dll
+0x00007fff24490000 - 0x00007fff24b75000 	C:\Windows\System32\SHELL32.dll
+0x00007fff21be0000 - 0x00007fff21c2a000 	C:\Windows\System32\cfgmgr32.dll
+0x00007fff22ef0000 - 0x00007fff22f99000 	C:\Windows\System32\shcore.dll
+0x00007fff21dd0000 - 0x00007fff2254f000 	C:\Windows\System32\windows.storage.dll
+0x00007fff21ac0000 - 0x00007fff21adf000 	C:\Windows\System32\profapi.dll
+0x00007fff21b00000 - 0x00007fff21b4a000 	C:\Windows\System32\powrprof.dll
+0x00007fff21a90000 - 0x00007fff21aa0000 	C:\Windows\System32\UMPDC.dll
+0x00007fff0b310000 - 0x00007fff0b32b000 	C:\Windows\SYSTEM32\MPR.dll
+0x00007fff21ae0000 - 0x00007fff21af1000 	C:\Windows\System32\kernel.appcore.dll
+0x00007fff228d0000 - 0x00007fff228e7000 	C:\Windows\System32\cryptsp.dll
+0x00007fff240a0000 - 0x00007fff241f6000 	C:\Windows\System32\ole32.dll
+0x00007fff22c70000 - 0x00007fff22d34000 	C:\Windows\System32\OLEAUT32.dll
+0x00007fff23f10000 - 0x00007fff23f7f000 	C:\Windows\System32\WS2_32.dll
+0x00007fff21050000 - 0x00007fff2111a000 	C:\Windows\SYSTEM32\Dnsapi.dll
+0x00007fff23ce0000 - 0x00007fff23ce8000 	C:\Windows\System32\NSI.dll
+0x00007fff21010000 - 0x00007fff2104a000 	C:\Windows\SYSTEM32\IPHLPAPI.DLL
+0x00007fff0b100000 - 0x00007fff0b30f000 	C:\Windows\SYSTEM32\DtFrame64.dll
+0x00007fff09c70000 - 0x00007fff09ca1000 	C:\Windows\SYSTEM32\TIjtdrvd64.dll
+0x00007fff0b330000 - 0x00007fff0b3b9000 	C:\Windows\SYSTEM32\winspool.drv
+0x00007fff21b50000 - 0x00007fff21b76000 	C:\Windows\System32\bcrypt.dll
+0x00007fff1c620000 - 0x00007fff1c70f000 	C:\Windows\SYSTEM32\PROPSYS.dll
+0x00007fff17870000 - 0x00007fff1798d000 	C:\Windows\SYSTEM32\DtsFrame64.dll
+0x00007fff21300000 - 0x00007fff21367000 	C:\Windows\SYSTEM32\mswsock.dll
+0x00007fff19080000 - 0x00007fff1908c000 	C:\Windows\SYSTEM32\WinUsb.dll
+0x00007fff22d40000 - 0x00007fff22d48000 	C:\Windows\System32\psapi.dll
+0x00007fff05910000 - 0x00007fff05a00000 	C:\Windows\SYSTEM32\TMailHook64.dll
+0x00000000773d0000 - 0x00000000774a2000 	D:\ProgramInstall\java8\jdk1.8\jre\bin\msvcr100.dll
+0x0000000076b20000 - 0x00000000773c2000 	D:\ProgramInstall\java8\jdk1.8\jre\bin\server\jvm.dll
+0x00007fff18700000 - 0x00007fff18709000 	C:\Windows\SYSTEM32\WSOCK32.dll
+0x00007fff13da0000 - 0x00007fff13dc4000 	C:\Windows\SYSTEM32\WINMM.dll
+0x00007fff13d70000 - 0x00007fff13d9d000 	C:\Windows\SYSTEM32\WINMMBASE.dll
+0x0000000077690000 - 0x000000007769f000 	D:\ProgramInstall\java8\jdk1.8\jre\bin\verify.dll
+0x0000000076af0000 - 0x0000000076b19000 	D:\ProgramInstall\java8\jdk1.8\jre\bin\java.dll
+0x00000000769a0000 - 0x00000000769d5000 	D:\ProgramInstall\java8\jdk1.8\jre\bin\jdwp.dll
+0x0000000076990000 - 0x0000000076998000 	D:\ProgramInstall\java8\jdk1.8\jre\bin\npt.dll
+0x0000000077670000 - 0x0000000077686000 	D:\ProgramInstall\java8\jdk1.8\jre\bin\zip.dll
+
+VM Arguments:
+jvm_args: -agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=53063 -Dfile.encoding=UTF-8 -Duser.country=CN -Duser.language=zh -Duser.variant 
+java_command: io.sam.MainTest
+java_class_path (initial): E:\IdeaProjects\spring-framework\sample-test\build\classes\java\test;E:\IdeaProjects\spring-framework\sample-test\build\resources\test;E:\IdeaProjects\spring-framework\sample-test\build\classes\java\main;E:\IdeaProjects\spring-framework\sample-test\build\resources\main;E:\IdeaProjects\spring-framework\sample-test\build\libs\sample-test-5.2.7.BUILD-SNAPSHOT-test-fixtures.jar;E:\IdeaProjects\spring-framework\sample-test\build\libs\sample-test-5.2.7.BUILD-SNAPSHOT.jar;E:\IdeaProjects\spring-framework\spring-context\build\libs\spring-context-5.2.7.BUILD-SNAPSHOT.jar;E:\IdeaProjects\spring-framework\spring-aop\build\libs\spring-aop-5.2.7.BUILD-SNAPSHOT.jar;E:\IdeaProjects\spring-framework\spring-beans\build\libs\spring-beans-5.2.7.BUILD-SNAPSHOT.jar;E:\IdeaProjects\spring-framework\spring-expression\build\libs\spring-expression-5.2.7.BUILD-SNAPSHOT.jar;E:\IdeaProjects\spring-framework\spring-core\build\libs\spring-core-5.2.7.BUILD-SNAPSHOT.jar;E:\IdeaProjects\spring-framework\spring-core\build\libs\spring-cglib-repack-3.3.0.jar;E:\IdeaProjects\spring-framework\spring-core\build\libs\spring-objenesis-repack-3.1.jar;E:\gradleRepository\.gradle\caches\modules-2\files-2.1\org.junit.jupiter\junit-jupiter-params\5.6.2\f2a64a42cf73077062c2386db0598062b7480d91\junit-jupiter-params-5.6.2.jar;E:\gradleRepository\.gradle\caches\modules-2\files-2.1\org.mockito\mockito-junit-jupiter\3.3.3\1176ce43cf773e11a5a318ff04e57e55f9187347\mockito-junit-jupiter-3.3.3.jar;E:\gradleRepository\.gradle\caches\modules-2\files-2.1\org.junit.jupiter\junit-jupiter-engine\5.6.2\c0833bd6de29dd77f8d071025b97b8b434308cd3\junit-jupiter-engine-5.6.2.jar;E:\gradleRepository\.gradle\caches\modules-2\files-2.1\org.junit.jupiter\junit-jupiter-api\5.6.2\c9ba885abfe975cda123bf6f8f0a69a1b46956d0\junit-jupiter-api-5.6.2.jar;E:\gradleRepository\.gradle\caches\modules-2\files-2.1\org.mockito\mockito-core\3.3.3\4878395d4e63173f3825e17e5e0690e8054445f1\mockito-core-3.3.3.jar;E:\gradleReposit
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=D:\ProgramInstall\java8\jdk1.8
+CLASSPATH=D:\ProgramInstall\java8\jdk1.8\lib\dt.jar;D:\ProgramInstall\java8\jdk1.8\lib\tools.jar
+PATH=C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;D:\ProgramInstall\Git\cmd;D:\ProgramInstall\java8\jdk1.8\bin;D:\ProgramInstall\java8\jdk1.8\jre\bin;D:\ProgramInstall\maven\apache-maven-3.6.3\bin;C:\Program Files\MySQL\MySQL Server 8.0\bin;D:\ProgramInstall\gradle-5.6.4\bin;C:\Users\zhuweimu\AppData\Local\Microsoft\WindowsApps;;D:\ProgramInstall\IntelliJ IDEA 2020.1\bin;
+USERNAME=zhuweimu
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 18362 (10.0.18362.329)
+
+CPU:total 8 (initial active 8) (4 cores per cpu, 2 threads per core) family 6 model 142 stepping 12, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 16580944k(2663824k free), swap 31428940k(6132k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.181-b13) for windows-amd64 JRE (1.8.0_181-b13), built on Jul  7 2018 04:01:33 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Mon Oct 19 17:12:00 2020
+elapsed time: 0 seconds (0d 0h 0m 0s)
+

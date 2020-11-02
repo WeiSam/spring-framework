@@ -250,20 +250,27 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable Class<? extends Annotation>[] qualifiers, @Nullable Supplier<T> supplier,
 			@Nullable BeanDefinitionCustomizer[] customizers) {
 
+		//根据指定配置类bean创建spring容器bean定义结构
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
+		//根据原注解数据是否注册到容器
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}
 
 		abd.setInstanceSupplier(supplier);
+		//解析注解bean作用域(@scope注解)
 		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
+		//设置bean定义作用域
 		abd.setScope(scopeMetadata.getScopeName());
+		//生成bean名称
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
 
+		//处理公共bean定义注解，通用注解解析设置bean定义值
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
 		if (qualifiers != null) {
 			for (Class<? extends Annotation> qualifier : qualifiers) {
 				if (Primary.class == qualifier) {
+					//如果配置了 Primary 注解，设置该 Bean autowing 自动依赖注入装配时的首选
 					abd.setPrimary(true);
 				}
 				else if (Lazy.class == qualifier) {
@@ -274,14 +281,18 @@ public class AnnotatedBeanDefinitionReader {
 				}
 			}
 		}
+		//自定义额外处理bean定义
 		if (customizers != null) {
 			for (BeanDefinitionCustomizer customizer : customizers) {
 				customizer.customize(abd);
 			}
 		}
 
+		//根据bean定义和bean名称封装bean定义类对象
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
+		//根据配置的@scope属性创建代理对象，为AOP处理做准备
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
+		//向IOC容器注册bean定义对象
 		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);
 	}
 

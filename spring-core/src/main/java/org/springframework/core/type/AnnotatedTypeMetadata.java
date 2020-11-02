@@ -54,11 +54,12 @@ public interface AnnotatedTypeMetadata {
 	MergedAnnotations getAnnotations();
 
 	/**
+	 * 此元素是否标有 {@param annotationName} 注解
 	 * Determine whether the underlying element has an annotation or meta-annotation
 	 * of the given type defined.
 	 * <p>If this method returns {@code true}, then
 	 * {@link #getAnnotationAttributes} will return a non-null Map.
-	 * @param annotationName the fully qualified class name of the annotation
+	 * @param annotationName the fully qualified class name of the annotation 注解全名称
 	 * type to look for
 	 * @return whether a matching annotation is defined
 	 */
@@ -67,6 +68,7 @@ public interface AnnotatedTypeMetadata {
 	}
 
 	/**
+	 * 获取注解全部属性 k -> v
 	 * Retrieve the attributes of the annotation of the given type, if any (i.e. if
 	 * defined on the underlying element, as direct annotation or meta-annotation),
 	 * also taking attribute overrides on composed annotations into account.

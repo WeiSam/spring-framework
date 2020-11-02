@@ -53,8 +53,10 @@ import org.springframework.util.Assert;
  */
 public class AnnotationConfigApplicationContext extends GenericApplicationContext implements AnnotationConfigRegistry {
 
+	//读取注解的bean定义读取器
 	private final AnnotatedBeanDefinitionReader reader;
 
+	//扫描指定类路径的bean定义扫描器
 	private final ClassPathBeanDefinitionScanner scanner;
 
 
@@ -84,8 +86,11 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * {@link Configuration @Configuration} classes
 	 */
 	public AnnotationConfigApplicationContext(Class<?>... componentClasses) {
+		//创建一个空的容器
 		this();
+		//注册指定bean配置类对象
 		register(componentClasses);
+		//刷新容器
 		refresh();
 	}
 
@@ -96,8 +101,11 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * @param basePackages the packages to scan for component classes
 	 */
 	public AnnotationConfigApplicationContext(String... basePackages) {
+		//注册bean读取注解bean定义的读取器和类路径bean定义扫描器
 		this();
+		//扫描并注册指定路径下bean定义
 		scan(basePackages);
+		//刷新Spring容器
 		refresh();
 	}
 
@@ -173,6 +181,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	@Override
 	public void scan(String... basePackages) {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
+		//扫描器扫描并注册bean定义
 		this.scanner.scan(basePackages);
 	}
 
