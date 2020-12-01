@@ -279,15 +279,20 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 			//扫描该包下所有符合条件的的bean定义，条件等过滤规则
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
 			for (BeanDefinition candidate : candidates) {
+				//解析获取@scope注解元信息
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
+				//设置bean作用域
 				candidate.setScope(scopeMetadata.getScopeName());
+				//生成bean名称
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
+				//bean定义一些属性值初始化
 				if (candidate instanceof AbstractBeanDefinition) {
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
 				if (candidate instanceof AnnotatedBeanDefinition) {
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
+				//检验给定的bean名称和注册的bean定义，是否已注册或名称冲突
 				if (checkCandidate(beanName, candidate)) {
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
 					definitionHolder =

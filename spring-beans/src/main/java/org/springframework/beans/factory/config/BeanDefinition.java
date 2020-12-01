@@ -201,7 +201,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	boolean isPrimary();
 
 	/**
-	 * 设置要使用的bean工厂
+	 * 设置要使用的bean工厂名称
 	 * Specify the factory bean to use, if any.
 	 * This the name of the bean to call the specified factory method on.
 	 * @see #setFactoryMethodName
@@ -215,7 +215,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String getFactoryBeanName();
 
 	/**
-	 * 指定工厂方法名称
+	 * 指定工厂方法名称，此方法将使用构造函数参数调用，如果未指定任何参数，则不适用任何参数。
+	 * 该方法将在指定的工厂bean上调用，或者作为本地bean类上的静态方法调用
 	 * Specify a factory method, if any. This method will be invoked with
 	 * constructor arguments, or with no arguments if none are specified.
 	 * The method will be invoked on the specified factory bean, if any,
@@ -365,6 +366,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String getResourceDescription();
 
 	/**
+	 * 返回原始的bean定义
 	 * Return the originating BeanDefinition, or {@code null} if none.
 	 * <p>Allows for retrieving the decorated bean definition, if any.
 	 * <p>Note that this method returns the immediate originator. Iterate through the

@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 public interface AttributeAccessor {
 
 	/**
+	 * 通过属性名设置属性值
 	 * Set the attribute defined by {@code name} to the supplied {@code value}.
 	 * If {@code value} is {@code null}, the attribute is {@link #removeAttribute removed}.
 	 * <p>In general, users should take care to prevent overlaps with other
@@ -39,6 +40,7 @@ public interface AttributeAccessor {
 	void setAttribute(String name, @Nullable Object value);
 
 	/**
+	 * 通过属性名获取属性值
 	 * Get the value of the attribute identified by {@code name}.
 	 * Return {@code null} if the attribute doesn't exist.
 	 * @param name the unique attribute key
@@ -48,6 +50,7 @@ public interface AttributeAccessor {
 	Object getAttribute(String name);
 
 	/**
+	 * 删除指定属性名称的属性值
 	 * Remove the attribute identified by {@code name} and return its value.
 	 * Return {@code null} if no attribute under {@code name} is found.
 	 * @param name the unique attribute key
@@ -57,6 +60,7 @@ public interface AttributeAccessor {
 	Object removeAttribute(String name);
 
 	/**
+	 * 判断属性名称是否存在
 	 * Return {@code true} if the attribute identified by {@code name} exists.
 	 * Otherwise return {@code false}.
 	 * @param name the unique attribute key
@@ -64,6 +68,7 @@ public interface AttributeAccessor {
 	boolean hasAttribute(String name);
 
 	/**
+	 * 返回所有属性名称
 	 * Return the names of all attributes.
 	 */
 	String[] attributeNames();

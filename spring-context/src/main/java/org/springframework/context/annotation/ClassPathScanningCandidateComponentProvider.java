@@ -319,6 +319,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 			return addCandidateComponentsFromIndex(this.componentsIndex, basePackage);
 		}
 		else {
+			//扫描能注册的bean定义
 			return scanCandidateComponents(basePackage);
 		}
 	}
@@ -435,11 +436,14 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				}
 				if (resource.isReadable()) {
 					try {
-						//
+						//通过resource获取类元数据信息
 						MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
+						//根据元数据校验 excludeFilters<TypeFilter>和 includeFilters<TypeFilter>是否匹配、@condition条件判断
 						if (isCandidateComponent(metadataReader)) {
+							//创建bean定义
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setSource(resource);
+							//校验能否示例化
 							if (isCandidateComponent(sbd)) {
 								if (debugEnabled) {
 									logger.debug("Identified candidate component class: " + resource);
