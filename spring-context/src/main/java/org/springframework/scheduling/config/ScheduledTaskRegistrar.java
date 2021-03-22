@@ -69,9 +69,16 @@ public class ScheduledTaskRegistrar implements ScheduledTaskHolder, Initializing
 	public static final String CRON_DISABLED = "-";
 
 
+	/**
+	 * 定时任务执行者，未指定默认使用{@link ConcurrentTaskScheduler},
+	 * 可以实现SchedulingConfigurer配置类中指定线程池来执行
+	 */
 	@Nullable
 	private TaskScheduler taskScheduler;
 
+	/**
+	 * taskScheduler未指定时，使用该定时任务执行，默认单线程池串行执行
+	 */
 	@Nullable
 	private ScheduledExecutorService localExecutor;
 
@@ -87,8 +94,10 @@ public class ScheduledTaskRegistrar implements ScheduledTaskHolder, Initializing
 	@Nullable
 	private List<IntervalTask> fixedDelayTasks;
 
+	//保存未执行的定时任务
 	private final Map<Task, ScheduledTask> unresolvedTasks = new HashMap<>(16);
 
+	//保存已执行定时任务
 	private final Set<ScheduledTask> scheduledTasks = new LinkedHashSet<>(16);
 
 
@@ -355,10 +364,13 @@ public class ScheduledTaskRegistrar implements ScheduledTaskHolder, Initializing
 	 */
 	@SuppressWarnings("deprecation")
 	protected void scheduleTasks() {
+
+		//默认单线程池串行执行
 		if (this.taskScheduler == null) {
 			this.localExecutor = Executors.newSingleThreadScheduledExecutor();
 			this.taskScheduler = new ConcurrentTaskScheduler(this.localExecutor);
 		}
+		//执行定时任务
 		if (this.triggerTasks != null) {
 			for (TriggerTask task : this.triggerTasks) {
 				addScheduledTask(scheduleTriggerTask(task));
@@ -402,6 +414,7 @@ public class ScheduledTaskRegistrar implements ScheduledTaskHolder, Initializing
 			scheduledTask = new ScheduledTask(task);
 			newTask = true;
 		}
+		//执行定时任务
 		if (this.taskScheduler != null) {
 			scheduledTask.future = this.taskScheduler.schedule(task.getRunnable(), task.getTrigger());
 		}

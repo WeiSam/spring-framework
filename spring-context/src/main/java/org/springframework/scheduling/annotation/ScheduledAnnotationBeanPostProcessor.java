@@ -118,8 +118,14 @@ public class ScheduledAnnotationBeanPostProcessor
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/**
+	 * 定时任务注册器
+	 */
 	private final ScheduledTaskRegistrar registrar;
 
+	/**
+	 * 定时任务执行者，即是定时任务执行线程池，若无指定，则默写使用单线程池串行执行
+	 */
 	@Nullable
 	private Object scheduler;
 
@@ -224,6 +230,10 @@ public class ScheduledAnnotationBeanPostProcessor
 		}
 	}
 
+	/**
+	 * ContextRefreshedEvent 该事件会在 applicationContext被初始化或更新时执行
+	 * @param event the event to respond to
+	 */
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		if (event.getApplicationContext() == this.applicationContext) {
@@ -240,10 +250,12 @@ public class ScheduledAnnotationBeanPostProcessor
 		}
 
 		if (this.beanFactory instanceof ListableBeanFactory) {
+			//获取SchedulingConfigurer配置类
 			Map<String, SchedulingConfigurer> beans =
 					((ListableBeanFactory) this.beanFactory).getBeansOfType(SchedulingConfigurer.class);
 			List<SchedulingConfigurer> configurers = new ArrayList<>(beans.values());
 			AnnotationAwareOrderComparator.sort(configurers);
+			//注册配置类，可指定定时任务使用的线程池
 			for (SchedulingConfigurer configurer : configurers) {
 				configurer.configureTasks(this.registrar);
 			}
@@ -333,6 +345,12 @@ public class ScheduledAnnotationBeanPostProcessor
 		return bean;
 	}
 
+	/**
+	 * bean创建之后调用，主要功能遍历所有带@Scheduled注解的bean，将任务放入任务队列中
+	 * @param bean the new bean instance
+	 * @param beanName the name of the bean
+	 * @return
+	 */
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) {
 		if (bean instanceof AopInfrastructureBean || bean instanceof TaskScheduler ||
@@ -341,9 +359,11 @@ public class ScheduledAnnotationBeanPostProcessor
 			return bean;
 		}
 
+		//获取代理对象的最终对象类型，若是代理对象则返回最终对象类型
 		Class<?> targetClass = AopProxyUtils.ultimateTargetClass(bean);
 		if (!this.nonAnnotatedClasses.contains(targetClass) &&
 				AnnotationUtils.isCandidateClass(targetClass, Arrays.asList(Scheduled.class, Schedules.class))) {
+			//收集被@Scheduled标注的方法
 			Map<Method, Set<Scheduled>> annotatedMethods = MethodIntrospector.selectMethods(targetClass,
 					(MethodIntrospector.MetadataLookup<Set<Scheduled>>) method -> {
 						Set<Scheduled> scheduledMethods = AnnotatedElementUtils.getMergedRepeatableAnnotations(
@@ -370,6 +390,7 @@ public class ScheduledAnnotationBeanPostProcessor
 	}
 
 	/**
+	 * 将定时任务放入任务队列中
 	 * Process the given {@code @Scheduled} method declaration on the given bean.
 	 * @param scheduled the @Scheduled annotation
 	 * @param method the method that the annotation has been declared on
