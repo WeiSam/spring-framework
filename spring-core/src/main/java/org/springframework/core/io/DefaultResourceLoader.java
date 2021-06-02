@@ -50,6 +50,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	@Nullable
 	private ClassLoader classLoader;
 
+	//用户自定义资源加载器,没有默认实现,由用户实现
 	private final Set<ProtocolResolver> protocolResolvers = new LinkedHashSet<>(4);
 
 	private final Map<Class<?>, Map<Resource, ?>> resourceCaches = new ConcurrentHashMap<>(4);

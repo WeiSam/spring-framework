@@ -518,6 +518,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// Prepare this context for refreshing.
 			prepareRefresh();
 
+			/**
+			 *告诉子类初始化fBeanFactory,初始化/刷新BeanFactory
+			 *如果存在BeanFactory则销毁后创建,保证BeanFactory是新的,初始化状态
+			 * 注解式{@link org.springframework.context.support.GenericApplicationContext}启动,
+			 *和xml启动{@link AbstractRefreshableApplicationContext}
+			 * 实现类不一样
+			 */
 			// Tell the subclass to refresh the internal bean factory.
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 

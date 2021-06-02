@@ -15,6 +15,7 @@ public class MainTest {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
 //		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("io.sam");
 		TestService testService = context.getBean(TestService.class);
+		context.getBean("prototypeService");
 		System.out.println(testService.test());
 	}
 
