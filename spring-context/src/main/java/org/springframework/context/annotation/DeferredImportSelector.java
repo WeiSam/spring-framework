@@ -20,6 +20,9 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.lang.Nullable;
 
 /**
+ * 延迟导入,在处理ImportSelector所有@Configuration bean 后运行的ImportSelector变体。
+ * 当所选导入是@Conditional时，这种类型的选择器可能特别有用,为了处理@Conditional条件判断时才延迟的???
+ *
  * A variation of {@link ImportSelector} that runs after all {@code @Configuration} beans
  * have been processed. This type of selector can be particularly useful when the selected
  * imports are {@code @Conditional}.

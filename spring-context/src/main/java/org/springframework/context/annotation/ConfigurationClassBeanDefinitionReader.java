@@ -137,14 +137,18 @@ class ConfigurationClassBeanDefinitionReader {
 			return;
 		}
 
+		//判断配置类是通过@Import导入的,是的话注册该配置类bean定义
 		if (configClass.isImported()) {
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
+		//注册配置类中,注册有@bean方法的bean定义
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 
+		//注册@mportedResource的bean定义
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
+		//注册@import中实现BeanDefinitionRegistrar接口的bean定义
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
 

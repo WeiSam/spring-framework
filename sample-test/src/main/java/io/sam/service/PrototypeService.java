@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,6 +20,7 @@ public class PrototypeService {
 /*    @Autowired
 	TestService testService;*/
 
+	@Scheduled(fixedRate = 10)
     public String test(){
         return "prototype";
     }

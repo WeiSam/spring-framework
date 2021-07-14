@@ -40,6 +40,7 @@ import java.lang.reflect.AccessibleObject;
 public interface Joinpoint {
 
 	/**
+	 * 核心方法,执行拦截逻辑,若存在拦截器链,则执行下一个拦截器方法
 	 * Proceed to the next interceptor in the chain.
 	 * <p>The implementation and the semantics of this method depends
 	 * on the actual joinpoint type (see the children interfaces).

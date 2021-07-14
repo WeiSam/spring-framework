@@ -586,7 +586,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		synchronized (mbd.postProcessingLock) {
 			if (!mbd.postProcessed) {
 				try {
-					//后置处理 修改bean定义,实现MergedBeanDefinitionPostProcessor后置处理器
+					//bean定义后置处理 修改bean定义,实现MergedBeanDefinitionPostProcessor后置处理器
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
@@ -617,7 +617,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Initialize the bean instance.
 		Object exposedObject = bean;
 		try {
-			//对bean中的属性进行依赖注入
+			//对bean中的属性进行依赖注入,此时注入依赖存在循环依赖,则会触发提前创建早期bean
+			//若是依赖本身bean,则会提前创建早期单例bean并存入单例缓存池中
 			populateBean(beanName, mbd, instanceWrapper);
 			//对bean应用后/前置处理器,初始化
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
@@ -634,11 +635,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		//解决单例循坏依赖
 		if (earlySingletonExposure) {
+			//因为前面允许提前暴露早期创建bean,所以此时不允许提前创建早期bean,因为本身创建早期bean没有必要再拿早期暴露的bean
+			// 此时可能bean已经被其他创建了,所以从单例缓存池尝试获取
+			//若是已经创建了早期bean,且bean在初始化过程中并未被重新创建,则使用早期终版bean
 			Object earlySingletonReference = getSingleton(beanName, false);
 			if (earlySingletonReference != null) {
 				if (exposedObject == bean) {
 					exposedObject = earlySingletonReference;
 				}
+				//TODO:bean被重新创建时校验???
 				else if (!this.allowRawInjectionDespiteWrapping && hasDependentBean(beanName)) {
 					String[] dependentBeans = getDependentBeans(beanName);
 					Set<String> actualDependentBeans = new LinkedHashSet<>(dependentBeans.length);
@@ -990,6 +995,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object exposedObject = bean;
 		if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 			for (BeanPostProcessor bp : getBeanPostProcessors()) {
+				//SmartInstantiationAwareBeanPostProcessor 后置处理器会增强或替换bean
+				//单独处理,防止循环依赖执行两遍
 				if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
 					SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;
 					exposedObject = ibp.getEarlyBeanReference(exposedObject, beanName);
@@ -1834,11 +1841,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}, getAccessControlContext());
 		}
 		else {
-			//TODO:激活aware方法???
+			//激活aware方法,设置回调方法,为实现类赋值相应属性
 			invokeAwareMethods(beanName, bean);
 		}
 
-		//后置处理器,执行postProcessBeforeInitialization
+		//bean实例后置处理器,执行postProcessBeforeInitialization,会激活后续其他aware,ApplicationContextAwareProcessor实现
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);

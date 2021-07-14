@@ -184,6 +184,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Nullable
 	private volatile String[] frozenBeanDefinitionNames;
 
+	//是否可以缓存所有bean定义元数据,当bean定义全部加载完成时,设置为true
+	//在refresh().finishBeanFactoryInitialization(beanFactory)处触发调用
 	/** Whether bean definition metadata may be cached for all beans. */
 	private volatile boolean configurationFrozen = false;
 
@@ -493,15 +495,20 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	@Override
 	public String[] getBeanNamesForType(@Nullable Class<?> type, boolean includeNonSingletons, boolean allowEagerInit) {
+		//未配置冻结,bean解析完成
+		//不允许提前初始化
+		//类型为空
 		if (!isConfigurationFrozen() || type == null || !allowEagerInit) {
 			return doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, allowEagerInit);
 		}
+		//判断是否单例缓存还是所有缓存,从缓存池中获取
 		Map<Class<?>, String[]> cache =
 				(includeNonSingletons ? this.allBeanNamesByType : this.singletonBeanNamesByType);
 		String[] resolvedBeanNames = cache.get(type);
 		if (resolvedBeanNames != null) {
 			return resolvedBeanNames;
 		}
+		//缓存不存在,则重新获取,并存入缓存中
 		resolvedBeanNames = doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, true);
 		if (ClassUtils.isCacheSafe(type, getBeanClassLoader())) {
 			cache.put(type, resolvedBeanNames);
@@ -868,6 +875,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		// While this may not be part of the regular factory bootstrap, it does otherwise work fine.
 		List<String> beanNames = new ArrayList<>(this.beanDefinitionNames);
 
+		//先实例化所有单例非懒加载的bean
 		// Trigger initialization of all non-lazy singleton beans...
 		for (String beanName : beanNames) {
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
@@ -897,6 +905,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 		}
 
+		//触发单例bean(实现 SmartInitializingSingleton )实例化的回调
 		// Trigger post-initialization callback for all applicable beans...
 		for (String beanName : beanNames) {
 			Object singletonInstance = getSingleton(beanName);
@@ -1157,8 +1166,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			ResolvableType requiredType, @Nullable Object[] args, boolean nonUniqueAsNull) throws BeansException {
 
 		Assert.notNull(requiredType, "Required type must not be null");
+		//通过指定类型获取符合类型的bean名称
 		String[] candidateNames = getBeanNamesForType(requiredType);
 
+		//符合的候选bean大于1个,挑选
 		if (candidateNames.length > 1) {
 			List<String> autowireCandidates = new ArrayList<>(candidateNames.length);
 			for (String beanName : candidateNames) {
@@ -1171,12 +1182,15 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 		}
 
+		//只有一个候选类,封装返回bean实例
 		if (candidateNames.length == 1) {
 			String beanName = candidateNames[0];
 			return new NamedBeanHolder<>(beanName, (T) getBean(beanName, requiredType.toClass(), args));
 		}
+		//候选bean大于1个,继续挑选
 		else if (candidateNames.length > 1) {
 			Map<String, Object> candidates = new LinkedHashMap<>(candidateNames.length);
+			//全部先实例化,缓存待候选
 			for (String beanName : candidateNames) {
 				if (containsSingleton(beanName) && args == null) {
 					Object beanInstance = getBean(beanName);
@@ -1186,10 +1200,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					candidates.put(beanName, getType(beanName));
 				}
 			}
+			//优先挑选Primary,标有Primary的bean
 			String candidateName = determinePrimaryCandidate(candidates, requiredType.toClass());
 			if (candidateName == null) {
+				//没有指定Primary,挑选Priority优选级高的bean实例
 				candidateName = determineHighestPriorityCandidate(candidates, requiredType.toClass());
 			}
+			//还未分出胜负则抛出异常
 			if (candidateName != null) {
 				Object beanInstance = candidates.get(candidateName);
 				if (beanInstance == null || beanInstance instanceof Class) {

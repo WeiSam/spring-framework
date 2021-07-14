@@ -81,10 +81,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
 	/**
+	 * 为了解决bean可能存在AOP的循环依赖情况,将BeanPostProcessor的执行提前,并懒加载执行,因为不是所有bean都有增强
 	 * 单例缓存池bean工厂,缓存beanName和ObjectFactory的映射
 	 * 与singletonObjects区别在于,利用ObjectFactory可以创建bean实例
-	 * 创建bean时,单例需要提前暴露时存放一个可以生成早期单例bean工厂
-	 * 可以理解为bean的factory,细节待确定
+	 * 创建bean时,为了解决bean可能存在AOP的情况,单例需要提前暴露时存放一个可以生成早期单例bean工厂,该工厂可以将bean增强
+	 * 可以理解为bean的factory
 	 */
 	/** Cache of singleton factories: bean name to ObjectFactory. */
 	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
@@ -216,10 +217,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				//单例缓存池不存在且允许提前创建
 				if (singletonObject == null && allowEarlyReference) {
+					//利用FactoryBean 提前创建单例bean,第一次进入singletonFactory为null
+					//在第一次创建bean对象时,保存bean对应的singletonFactorie
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {
+						//允许提前暴露且第二次获取bean时才触发创建早期对象,此步可以支持提前增强bean
 						singletonObject = singletonFactory.getObject();
-						//放入早期单例缓存池
+						//允许提前暴露且第二次获取bean时才放入早期单例缓存池,解决单例bean循环依赖问题
 						this.earlySingletonObjects.put(beanName, singletonObject);
 						this.singletonFactories.remove(beanName);
 					}
@@ -261,6 +265,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					this.suppressedExceptions = new LinkedHashSet<>();
 				}
 				try {
+					//根据给定FactoryBean创建对象
 					singletonObject = singletonFactory.getObject();
 					newSingleton = true;
 				}
@@ -284,7 +289,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					if (recordSuppressedExceptions) {
 						this.suppressedExceptions = null;
 					}
-					//创建对象后置处理
+					//创建对象后置处理,移除bean正在创建标识
 					afterSingletonCreation(beanName);
 				}
 				//成功创建单例对象,缓存singletonObjects并标志状态

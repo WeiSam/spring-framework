@@ -339,7 +339,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					}
 				}
 
-				//单例模式,创建bean对象
+				//单例模式,创建bean对象,第一次创建或有参构造函数的单例bean实例化触发
+				// 构造函数参数生效,spring初始化显示调用才生效
 				// Create bean instance.
 				if (mbd.isSingleton()) {
 					sharedInstance = getSingleton(beanName, () -> {

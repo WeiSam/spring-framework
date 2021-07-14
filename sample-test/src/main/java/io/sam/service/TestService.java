@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 //@DependsOn(value = "prototypeService")
-public class TestService {
+public class TestService implements TestInterface{
 
 	@Autowired
 	TestService testService;
@@ -19,7 +19,9 @@ public class TestService {
 	@Autowired
 	PrototypeService prototypeService;
 
+//	@Override
 	public String test(){
+		System.out.println("io.sam.service.TestService.test");
 		return "78238";
 	}
 }
